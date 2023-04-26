@@ -1,12 +1,9 @@
 import { FormEvent, useRef } from "react";
-import { Button } from "../components/Button";
-import { Input } from "../components/Input";
 import { useAuth } from "../context/AuthContext";
 
 export function Signup() {
   const { signup } = useAuth();
   const usernameRef = useRef<HTMLInputElement>(null);
-  const nameRef = useRef<HTMLInputElement>(null);
   const imageUrlRef = useRef<HTMLInputElement>(null);
 
   function handleSubmit(e: FormEvent) {
@@ -14,7 +11,7 @@ export function Signup() {
     if (signup.isLoading) return;
 
     const username = usernameRef.current?.value;
-    const name = nameRef.current?.value;
+    const name = username;
     const imageUrl = imageUrlRef.current?.value;
     if (username == null || username === "" || name == null || name === "") {
       return;
@@ -22,30 +19,57 @@ export function Signup() {
 
     signup.mutate({ id: username, name, image: imageUrl });
   }
-
   return (
     <>
-      <h1 className="text-3xl font-bold mb-8 text-center text-white">Sign Up</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-[auto,1fr] gap-x-3 gap-y-5 items-center justify-items-end"
-      >
-        <label htmlFor="userName" className="text-white">
-          Username
-        </label>
-        <Input id="userName" pattern="\S*" required ref={usernameRef} />
-        <label htmlFor="name" className="text-white">
-          Name
-        </label>
-        <Input id="name" required ref={nameRef} />
-        <label htmlFor="imageUrl" className="text-white">
-          Image Url
-        </label>
-        <Input id="imageUrl" type="url" ref={imageUrlRef} />
-        <Button disabled={signup.isLoading} type="submit" className="col-span-full">
-          {signup.isLoading ? "Loading.." : "Sign Up"}
-        </Button>
-      </form>
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <img className="mx-auto h-10 w-auto" src="/icon.svg" alt="Your Company" />
+          <h2 className="mt-10 text-center text-white text-2xl font-bold leading-9 tracking-tight">Sign in to chat</h2>
+        </div>
+
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium leading-6 text-white">
+                Username
+              </label>
+              <div className="mt-2">
+                <input
+                  name="username"
+                  ref={usernameRef}
+                  type="text"
+                  required
+                  className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="image" className="block text-sm font-medium leading-6 text-white">
+                Image URL
+              </label>
+              <div className="mt-2">
+                <input
+                  name="image"
+                  ref={imageUrlRef}
+                  type="text"
+                  required
+                  className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div>
+              <button
+                disabled={signup.isLoading}
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-yellow-500 px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+              >
+                {signup.isLoading ? "Loading.." : "Sign Up"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </>
   );
 }
